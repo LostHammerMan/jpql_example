@@ -11,6 +11,32 @@ public class Member {
     private String username;
     private int age;
 
+    @Enumerated(EnumType.STRING)
+    private MemberType type;
+
+    // 빌더 패턴
+    /*public static class MemberBuilder {
+//        private Long id;
+        private String username;
+        private int age;
+        private MemberType memberType;
+
+        public MemberBuilder(String username, int age, MemberType memberType){
+            this.username = username;
+            this.age = age;
+            this.memberType = memberType;
+        }
+    }*/
+
+
+    public MemberType getType() {
+        return type;
+    }
+
+    public void setType(MemberType type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
@@ -20,9 +46,23 @@ public class Member {
                 '}';
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
+
+    // 연관관계 편의 메서드
+    public void changeTeam(Team team){
+        this.team = team;
+        team.getMembers().add(this);
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     public Long getId() {
         return id;
